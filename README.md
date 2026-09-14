@@ -147,4 +147,4 @@ A few real issues hit during deployment (full write-ups in the original report):
 
 ## Author
 
-Aazad Kumar Mishra — built for INT-330, Managing Cloud Solutions, Lovely Professional University.
+Aazad Kumar Mishra
