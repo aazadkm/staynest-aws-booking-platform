@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>StayNest Admin</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; background: #f5f5f7; margin: 0; }
+  .center { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; width: 320px; }
+  .login-card h1 { margin: 0 0 4px; }
+  .login-card p { color: #888; margin-top: 0; font-size: 13px; }
+  input { width: 100%; padding: 10px; margin: 16px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+  button { width: 100%; padding: 10px; background: #e0603e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+  #dashboard { display: none; max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+  .stats { display: flex; gap: 16px; margin-bottom: 24px; }
+  .stat-card { flex: 1; background: white; border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .stat-card .num { font-size: 28px; font-weight: 700; }
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  th, td { padding: 10px 14px; text-align: left; font-size: 13px; border-bottom: 1px solid #eee; }
+  th { background: #fafafa; }
+  .refresh { float: right; margin-bottom: 10px; padding: 8px 14px; background: #333; color: white; border: none; border-radius: 6px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="center" id="loginScreen">
+  <div class="login-card">
+    <h1>🏡 StayNest</h1>
+    <p>Admin Dashboard — Owner Access Only</p>
+    <input type="password" id="pwInput" placeholder="Enter admin password" />
+    <button onclick="login()">Login</button>
+  </div>
+</div>
+
+<div id="dashboard">
+  <h2>StayNest Bookings</h2>
+  <button class="refresh" onclick="loadBookings()">⟳ Refresh</button>
+  <div class="stats">
+    <div class="stat-card"><div class="num" id="totalBookings">0</div>Total Bookings</div>
+    <div class="stat-card"><div class="num" id="totalRevenue">₹0</div>Total Revenue</div>
+    <div class="stat-card"><div class="num" id="totalGuests">0</div>Total Guests</div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Booking ID</th><th>Guest</th><th>Email</th><th>Property</th><th>Location</th>
+        <th>Check-in</th><th>Check-out</th><th>Guests</th><th>Total</th><th>Booked At</th>
+      </tr>
+    </thead>
+    <tbody id="bookingsBody"></tbody>
+  </table>
+</div>
+
+<script>
+  // Point this at your deployed API root (same origin in production, or full URL if separate).
+  const API_BASE = "";
+  let adminPassword = "";
+
+  function login() {
+    adminPassword = document.getElementById("pwInput").value;
+    loadBookings();
+  }
+
+  async function loadBookings() {
+    const res = await fetch(`${API_BASE}/api/admin/bookings?password=${encodeURIComponent(adminPassword)}`);
+    if (res.status === 401) {
+      alert("Incorrect password");
+      return;
+    }
+    const data = await res.json();
+
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+
+    const tbody = document.getElementById("bookingsBody");
+    tbody.innerHTML = "";
+    let revenue = 0, guests = 0;
+
+    data.forEach(b => {
+      revenue += Number(b.total) || 0;
+      guests += Number(b.guests) || 0;
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${String(b.id).substring(0, 8)}</td>
+        <td>${b.guest_name}</td>
+        <td>${b.email}</td>
+        <td>${b.property}</td>
+        <td>${b.location}</td>
+        <td>${b.checkin}</td>
+        <td>${b.checkout}</td>
+        <td>${b.guests}</td>
+        <td>₹${b.total}</td>
+        <td>${new Date(b.created_at).toLocaleString()}</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    document.getElementById("totalBookings").textContent = data.length;
+    document.getElementById("totalRevenue").textContent = `₹${revenue.toLocaleString()}`;
+    document.getElementById("totalGuests").textContent = guests;
+  }
+</script>
+
+</body>
+</html>
