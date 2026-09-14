@@ -23,12 +23,20 @@ StayNest lets visitors:
 
 ## Screenshots
 
-| Homepage | Listings | Admin Dashboard |
+**Homepage**
+![Homepage](screenshots/homepage.png)
+
+**Property Listings**
+![Listings](screenshots/listings.png)
+
+**Admin Dashboard Login**
+![Admin Login](screenshots/admin-login.png)
+
+### Infrastructure
+
+| S3 Bucket | CloudWatch Alarm | Auto Scaling Group |
 |---|---|---|
-| Hero section with search | Property cards with pricing | Live booking table + stats |
-
-*(Add exported screenshots from the report into a `/screenshots` folder and embed them here, e.g. `![Homepage](screenshots/homepage.png)`)*
-
+| ![S3](screenshots/s3-bucket.png) | ![CloudWatch](screenshots/cloudwatch-alarm.png) | ![ASG](screenshots/auto-scaling-group.png) |
 ---
 
 ## Architecture
