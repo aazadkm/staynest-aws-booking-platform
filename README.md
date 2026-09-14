@@ -2,7 +2,7 @@
 
 A cloud-native property rental listing platform (Airbnb-style), built and deployed as a full AWS architecture — from a single EC2 instance to a load-balanced, auto-scaling, monitored production setup.
 
-> Built for INT-330 (Managing Cloud Solutions) at Lovely Professional University. This repo documents the full architecture, decisions, and debugging process. **The live environment has since been decommissioned to avoid ongoing AWS charges** — see [Status](#status) below.
+> This repo documents the full architecture, decisions, and debugging process behind a production-style AWS deployment. **The live environment has since been decommissioned to avoid ongoing AWS charges** — see [Status](#status) below.
 
 ---
 
@@ -141,7 +141,6 @@ A few real issues hit during deployment (full write-ups in the original report):
 /frontend            # Static HTML/CSS/JS site + admin.html
 /nginx               # Nginx site config (location blocks for /admin, static routing)
 /screenshots          # Console + live-site screenshots from deployment
-/docs                # Full original project report (PDF)
 .env.example          # Required environment variables (no real secrets)
 ```
 
